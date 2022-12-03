@@ -13,36 +13,36 @@ import (
 var input string
 
 func main() {
-	fmt.Println(p1(input), p2(input))
+	lines := strings.Split(input, "\n")
+	fmt.Println(part1(lines), part2(lines))
 }
 
-func p1(input string) int {
+func part1(lines []string) int {
 	total := 0
 
-	for _, i := range strings.Split(input, "\n") {
-		r1 := []rune(i[:len(i)/2])
-		r2 := []rune(i[len(r1):])
+	for _, line := range lines {
+		r1 := []rune(line[:len(line)/2])
+		r2 := []rune(line[len(r1):])
 
-		in := util.Intersect(r1, r2)
+		intersection := util.Intersect(r1, r2)
 
-		total += letterValue(in[0])
+		total += letterValue(intersection[0])
 	}
 
 	return total
 }
 
-func p2(input string) int {
+func part2(lines []string) int {
 	total := 0
-	lines := strings.Split(input, "\n")
 
 	for i := 0; i < len(lines)-2; i += 3 {
 		r1 := []rune(lines[i])
 		r2 := []rune(lines[i+1])
 		r3 := []rune(lines[i+2])
 
-		in := util.Intersect(util.Intersect(r1, r2), r3)
+		intersection := util.Intersect(util.Intersect(r1, r2), r3)
 
-		total += letterValue(in[0])
+		total += letterValue(intersection[0])
 	}
 
 	return total

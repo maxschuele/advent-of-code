@@ -18,17 +18,26 @@ import (
 var input string
 
 func main() {
-	fmt.Println(p1(input), p2(input))
+	lines := strings.Split(input, \"\n\")
+	fmt.Println(part1(input), part2(input))
 }
 
-func p1(input string) int {
+func part1(lines []string) int {
 	total := 0
+
+	for _, line := range lines {
+
+	}
 
 	return total
 }
 
-func p2(input string) int {
+func part2(lines []string) int {
 	total := 0
+
+	for _, line := range lines {
+		
+	}
 
 	return total
 }" >> $path/main.go

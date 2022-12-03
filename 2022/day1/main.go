@@ -14,26 +14,24 @@ var input string
 
 func main() {
 	var (
-		elves   []int
+		sums    []int
 		counter int
 	)
 
-	for _, v := range strings.Split(input, "\n") {
-		if v == "" {
-			elves = append(elves, counter)
+	for _, line := range strings.Split(input, "\n") {
+		if line == "" {
+			sums = append(sums, counter)
 
 			counter = 0
 			continue
 		}
 
-		counter += util.Atoi(v)
+		counter += util.Atoi(line)
 	}
 
-	sort.Slice(elves, func(i, j int) bool {
-		return elves[i] > elves[j]
+	sort.Slice(sums, func(i, j int) bool {
+		return sums[i] > sums[j]
 	})
 
-	max3 := elves[0] + elves[1] + elves[2]
-
-	fmt.Println(elves[0], max3)
+	fmt.Println(sums[0], sums[0]+sums[1]+sums[2])
 }

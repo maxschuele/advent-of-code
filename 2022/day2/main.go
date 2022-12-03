@@ -10,10 +10,11 @@ import (
 var input string
 
 func main() {
-	fmt.Println(p1(input), p2(input))
+	lines := strings.Split(input, "\n")
+	fmt.Println(part1(lines), part2(lines))
 }
 
-func p1(input string) int {
+func part1(lines []string) int {
 	res := map[string]map[string]int{
 		"A": {"X": 3, "Y": 6, "Z": 0},
 		"B": {"X": 0, "Y": 3, "Z": 6},
@@ -27,16 +28,16 @@ func p1(input string) int {
 	}
 
 	total := 0
-	for _, i := range strings.Split(input, "\n") {
-		f := strings.Fields(i)
+	for _, line := range lines {
+		fields := strings.Fields(line)
 
-		total += vals[f[1]] + res[f[0]][f[1]]
+		total += vals[fields[1]] + res[fields[0]][fields[1]]
 	}
 
 	return total
 }
 
-func p2(input string) int {
+func part2(lines []string) int {
 	res := map[string]map[string]int{
 		"A": {"X": 3, "Y": 1, "Z": 2},
 		"B": {"X": 1, "Y": 2, "Z": 3},
@@ -50,10 +51,10 @@ func p2(input string) int {
 	}
 
 	total := 0
-	for _, i := range strings.Split(input, "\n") {
-		f := strings.Fields(i)
+	for _, line := range lines {
+		fields := strings.Fields(line)
 
-		total += vals[f[1]] + res[f[0]][f[1]]
+		total += vals[fields[1]] + res[fields[0]][fields[1]]
 	}
 
 	return total
