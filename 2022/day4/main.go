@@ -4,13 +4,17 @@ import (
 	"bufio"
 	_ "embed"
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"strings"
 )
 
 func main() {
-	file, _ := os.Open("input.txt")
+	file, err := os.Open("input.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	reader := bufio.NewScanner(file)
 
@@ -22,7 +26,10 @@ func main() {
 		var a [4]int
 
 		for i := 0; i < 4; i++ {
-			a[i], _ = strconv.Atoi(f[i])
+			a[i], err = strconv.Atoi(f[i])
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 
 		if a[0] >= a[2] && a[1] <= a[3] || a[0] <= a[2] && a[1] >= a[3] {
