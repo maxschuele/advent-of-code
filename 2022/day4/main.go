@@ -1,41 +1,38 @@
 package main
 
 import (
+	"bufio"
 	_ "embed"
 	"fmt"
+	"os"
+	"strconv"
 	"strings"
-
-	"github.com/google/go-cmp/cmp"
-	"github.com/maxschuele/advent-of-code/util"
 )
 
-//go:embed input.txt
-var input string
-
 func main() {
-	var (
-		p1, p2 int
-		lines  = strings.Split(input, "\n")
-	)
+	file, _ := os.Open("input.txt")
 
-	for _, line := range lines {
-		assignments := strings.Split(line, ",")
+	reader := bufio.NewScanner(file)
 
-		a0 := util.ArrAtoi(strings.Split(assignments[0], "-"))
-		a1 := util.ArrAtoi(strings.Split(assignments[1], "-"))
+	var p1, p2 int
 
-		range1 := util.IntRange(a0[0], a0[1])
-		range2 := util.IntRange(a1[0], a1[1])
+	for reader.Scan() {
+		f := strings.FieldsFunc(reader.Text(), func(r rune) bool { return r == ',' || r == '-' })
 
-		intersection := util.Intersect(range1, range2)
+		var a [4]int
 
-		if cmp.Equal(range1, intersection) || cmp.Equal(range2, intersection) {
+		for i := 0; i < 4; i++ {
+			a[i], _ = strconv.Atoi(f[i])
+		}
+
+		if a[0] >= a[2] && a[1] <= a[3] || a[0] <= a[2] && a[1] >= a[3] {
 			p1++
 		}
 
-		if len(intersection) > 0 {
+		if a[0] <= a[3] && a[1] >= a[2] {
 			p2++
 		}
+
 	}
 
 	fmt.Println(p1, p2)
