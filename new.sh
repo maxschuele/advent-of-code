@@ -12,32 +12,25 @@ echo "package main
 import (
 	_ \"embed\"
 	\"fmt\"
+	\"strings\"
 )
 
 //go:embed input.txt
 var input string
 
 func main() {
-	lines := strings.Split(input, \"\n\")
-	fmt.Println(part1(input), part2(input))
+	lines := strings.Split(input, \"\\\n\")
+	fmt.Println(part1(lines), part2(lines))
 }
 
 func part1(lines []string) int {
 	total := 0
-
-	for _, line := range lines {
-
-	}
 
 	return total
 }
 
 func part2(lines []string) int {
 	total := 0
-
-	for _, line := range lines {
-		
-	}
 
 	return total
 }" >> $path/main.go
