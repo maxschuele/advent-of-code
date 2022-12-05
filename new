@@ -1,0 +1,30 @@
+#!/bin/sh
+
+path="day$1"
+
+mkdir $path
+touch $path/input.txt
+
+if [[ ! -e $path/main.go ]]; then
+touch $path/main.go
+echo "package main
+
+import (
+	\"fmt\"
+	\"log\"
+	\"os\"
+)
+
+func main() {
+	var p1, p2 int
+
+	file, err := os.Open(os.Args[1])
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(p1, p2)
+}" >> $path/main.go
+fi
+
+cd $path

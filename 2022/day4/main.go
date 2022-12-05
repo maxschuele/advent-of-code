@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	_ "embed"
 	"fmt"
 	"log"
 	"os"
@@ -11,17 +10,17 @@ import (
 )
 
 func main() {
-	file, err := os.Open("input.txt")
+	var p1, p2 int
+
+	file, err := os.Open(os.Args[1])
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	reader := bufio.NewScanner(file)
+	scanner := bufio.NewScanner(file)
 
-	var p1, p2 int
-
-	for reader.Scan() {
-		f := strings.FieldsFunc(reader.Text(), func(r rune) bool { return r == ',' || r == '-' })
+	for scanner.Scan() {
+		f := strings.FieldsFunc(scanner.Text(), func(r rune) bool { return r == ',' || r == '-' })
 
 		var a [4]int
 
