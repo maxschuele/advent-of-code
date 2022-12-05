@@ -5,11 +5,10 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"regexp"
 	"strconv"
 	"strings"
 
-	"container/list"
+	"github.com/edwingeng/deque/v2"
 )
 
 func main() {
@@ -19,20 +18,36 @@ func main() {
 	}
 
 	scanner := bufio.NewScanner(file)
-	crates := initCrates(scanner)
-	move(scanner, crates)
+	crates, crates2 := parseCrates(scanner)
+	moves := parseMoves(scanner)
 
-	var p1 strings.Builder
+	for _, m := range moves {
+		for _, e := range crates[m[1]].DequeueMany(m[0]) {
+			crates[m[2]].PushFront(e)
+		}
 
-	for i := 1; i <= len(crates); i++ {
-		p1.WriteString(string(crates[i].Front().Value.(uint8)))
+		x := crates2[m[1]].DequeueMany(m[0])
+		for i := len(x) - 1; i >= 0; i-- {
+			crates2[m[2]].PushFront(x[i])
+		}
 	}
 
-	fmt.Println(p1.String())
+	var p1, p2 []byte
+	for i := 1; i <= len(crates); i++ {
+		f1, _ := crates[i].Front()
+		f2, _ := crates2[i].Front()
+		p1 = append(p1, f1)
+		p2 = append(p2, f2)
+	}
+
+	fmt.Println(string(p1))
+	fmt.Println(string(p2))
+
 }
 
-func initCrates(s *bufio.Scanner) map[int]*list.List {
-	crates := make(map[int]*list.List)
+func parseCrates(s *bufio.Scanner) (map[int]*deque.Deque[byte], map[int]*deque.Deque[byte]) {
+	crates := make(map[int]*deque.Deque[byte])
+	crates2 := make(map[int]*deque.Deque[byte])
 
 	for s.Scan() {
 		line := s.Text()
@@ -45,10 +60,12 @@ func initCrates(s *bufio.Scanner) map[int]*list.List {
 		for i := 1; i < len(line); i += 4 {
 			if line[i] != ' ' {
 				if crates[crateIndex] == nil {
-					crates[crateIndex] = list.New()
+					crates[crateIndex] = deque.NewDeque[byte]()
+					crates2[crateIndex] = deque.NewDeque[byte]()
 				}
 
 				crates[crateIndex].PushBack(line[i])
+				crates2[crateIndex].PushBack(line[i])
 			}
 
 			crateIndex++
@@ -56,23 +73,18 @@ func initCrates(s *bufio.Scanner) map[int]*list.List {
 	}
 
 	s.Scan() //get rid of the empty line
-
-	return crates
+	return crates, crates2
 }
 
-func move(s *bufio.Scanner, crates map[int]*list.List) {
+func parseMoves(s *bufio.Scanner) [][3]int {
+	var moves [][3]int
 	for s.Scan() {
-		line := s.Text()
-		re := regexp.MustCompile(`\d[\d,]*`)
-
-		instructions := re.FindAllString(line, -1)
-		moves, _ := strconv.Atoi(instructions[0])
-		from, _ := strconv.Atoi(instructions[1])
-		to, _ := strconv.Atoi(instructions[2])
-
-		for i := 0; i < moves; i++ {
-			e := crates[from].Remove(crates[from].Front())
-			crates[to].PushFront(e)
-		}
+		fields := strings.Fields(s.Text())
+		n, _ := strconv.Atoi(fields[1])
+		f, _ := strconv.Atoi(fields[3])
+		t, _ := strconv.Atoi(fields[5])
+		moves = append(moves, [3]int{n, f, t})
 	}
+
+	return moves
 }
